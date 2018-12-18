@@ -106,7 +106,8 @@ public class SimpleFragmentAdapter extends PagerAdapter {
             // 压缩过的gif就不是gif了
             if (isGif && !media.isCompressed()) {
                 RequestOptions gifOptions = new RequestOptions()
-                        .override(480, 800)
+                        // TODO: 2018-12-18 修改了这里
+                        .override(1080, 1920)
                         .priority(Priority.HIGH)
                         .diskCacheStrategy(DiskCacheStrategy.NONE);
                 Glide.with(contentView.getContext())
@@ -121,7 +122,7 @@ public class SimpleFragmentAdapter extends PagerAdapter {
                         .asBitmap()
                         .load(path)
                         .apply(options)
-                        .into(new SimpleTarget<Bitmap>(480, 800) {
+                        .into(new SimpleTarget<Bitmap>(1080, 1920) {
                             @Override
                             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                                 if (eqLongImg) {

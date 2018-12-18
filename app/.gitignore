@@ -1,1 +1,7 @@
-/build
+# Intellij
+*.iml
+*.apk
+build/
+release/
+debug/
+
