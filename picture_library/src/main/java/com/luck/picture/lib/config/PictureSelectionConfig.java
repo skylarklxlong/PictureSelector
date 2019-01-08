@@ -42,8 +42,6 @@ public final class PictureSelectionConfig implements Parcelable {
     public int aspect_ratio_x;
     public int aspect_ratio_y;
     public float sizeMultiplier;
-    public int cropWidth;
-    public int cropHeight;
     public boolean zoomAnim;
     public boolean isCompress;
     public boolean isCamera;
@@ -86,8 +84,6 @@ public final class PictureSelectionConfig implements Parcelable {
         isCompress = false;
         aspect_ratio_x = 0;
         aspect_ratio_y = 0;
-        cropWidth = 0;
-        cropHeight = 0;
         isCamera = true;
         isGif = false;
         enablePreview = true;
@@ -156,8 +152,6 @@ public final class PictureSelectionConfig implements Parcelable {
         dest.writeInt(this.aspect_ratio_x);
         dest.writeInt(this.aspect_ratio_y);
         dest.writeFloat(this.sizeMultiplier);
-        dest.writeInt(this.cropWidth);
-        dest.writeInt(this.cropHeight);
         dest.writeByte(this.zoomAnim ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isCompress ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isCamera ? (byte) 1 : (byte) 0);
@@ -206,8 +200,6 @@ public final class PictureSelectionConfig implements Parcelable {
         this.aspect_ratio_x = in.readInt();
         this.aspect_ratio_y = in.readInt();
         this.sizeMultiplier = in.readFloat();
-        this.cropWidth = in.readInt();
-        this.cropHeight = in.readInt();
         this.zoomAnim = in.readByte() != 0;
         this.isCompress = in.readByte() != 0;
         this.isCamera = in.readByte() != 0;

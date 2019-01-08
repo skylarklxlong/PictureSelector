@@ -300,7 +300,6 @@ public class PictureBaseActivity extends FragmentActivity {
         UCrop.of(uri, Uri.fromFile(new File(PictureFileUtils.getDiskCacheDir(this),
                 System.currentTimeMillis() + imgType)))
                 .withAspectRatio(config.aspect_ratio_x, config.aspect_ratio_y)
-                .withMaxResultSize(config.cropWidth, config.cropHeight)
                 .withOptions(options)
                 .start(this);
     }

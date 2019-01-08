@@ -189,18 +189,6 @@ public class PictureSelectionModel {
         return this;
     }
 
-
-    /**
-     * @param cropWidth  crop width
-     * @param cropHeight crop height
-     * @return
-     */
-    public PictureSelectionModel cropWH(int cropWidth, int cropHeight) {
-        selectionConfig.cropWidth = cropWidth;
-        selectionConfig.cropHeight = cropHeight;
-        return this;
-    }
-
     /**
      * @param videoMaxSecond selection video max second
      * @return
