@@ -27,10 +27,7 @@ import com.luck.picture.lib.tools.ToastManage;
 import com.luck.picture.lib.tools.VoiceUtils;
 import com.luck.picture.lib.widget.PreviewViewPager;
 import com.yalantis.ucrop.UCrop;
-import com.yalantis.ucrop.UCropMulti;
-import com.yalantis.ucrop.model.CutInfo;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -402,22 +399,14 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
                     boolean eqImg = pictureType.startsWith(PictureConfig.IMAGE);
                     String str = eqImg ? getString(R.string.picture_min_img_num, config.minSelectNum)
                             : getString(R.string.picture_min_video_num, config.minSelectNum);
-                    ToastManage.s(mContext,str);
+                    ToastManage.s(mContext, str);
                     return;
                 }
             }
-            if (config.enableCrop && pictureType.startsWith(PictureConfig.IMAGE)) {
-                if (config.selectionMode == PictureConfig.SINGLE) {
-                    originalPath = image.getPath();
-                    startCrop(originalPath);
-                } else {
-                    // 是图片和选择压缩并且是多张，调用批量压缩
-                    ArrayList<String> cuts = new ArrayList<>();
-                    for (LocalMedia media : selectImages) {
-                        cuts.add(media.getPath());
-                    }
-                    startCrop(cuts);
-                }
+            if (config.enableCrop && config.selectionMode == PictureConfig.SINGLE && pictureType.startsWith(PictureConfig.IMAGE)) {
+                originalPath = image.getPath();
+                startCrop(originalPath);
+
             } else {
                 onResult(selectImages);
             }
@@ -439,12 +428,6 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case UCropMulti.REQUEST_MULTI_CROP:
-                    List<CutInfo> list = UCropMulti.getOutput(data);
-                    setResult(RESULT_OK, new Intent().putExtra(UCropMulti.EXTRA_OUTPUT_URI_LIST,
-                            (Serializable) list));
-                    finish();
-                    break;
                 case UCrop.REQUEST_CROP:
                     if (data != null) {
                         setResult(RESULT_OK, data);
@@ -454,7 +437,7 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Throwable throwable = (Throwable) data.getSerializableExtra(UCrop.EXTRA_ERROR);
-            ToastManage.s(mContext,throwable.getMessage());
+            ToastManage.s(mContext, throwable.getMessage());
         }
     }
 

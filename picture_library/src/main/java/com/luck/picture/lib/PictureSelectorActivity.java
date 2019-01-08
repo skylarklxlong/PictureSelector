@@ -49,9 +49,6 @@ import com.luck.picture.lib.tools.ToastManage;
 import com.luck.picture.lib.widget.FolderPopWindow;
 import com.luck.picture.lib.widget.PhotoPopupWindow;
 import com.yalantis.ucrop.UCrop;
-import com.yalantis.ucrop.UCropMulti;
-import com.yalantis.ucrop.model.CutInfo;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -482,8 +479,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             bundle.putSerializable(PictureConfig.EXTRA_PREVIEW_SELECT_LIST, (Serializable) medias);
             bundle.putSerializable(PictureConfig.EXTRA_SELECT_LIST, (Serializable) selectedImages);
             bundle.putBoolean(PictureConfig.EXTRA_BOTTOM_PREVIEW, true);
-            startActivity(PicturePreviewActivity.class, bundle,
-                    config.selectionMode == PictureConfig.SINGLE ? UCrop.REQUEST_CROP : UCropMulti.REQUEST_MULTI_CROP);
+            startActivity(PicturePreviewActivity.class, bundle, UCrop.REQUEST_CROP);
             overridePendingTransition(R.anim.a5, 0);
         }
 
@@ -502,18 +498,9 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     return;
                 }
             }
-            if (config.enableCrop && eqImg) {
-                if (config.selectionMode == PictureConfig.SINGLE) {
-                    originalPath = image.getPath();
-                    startCrop(originalPath);
-                } else {
-                    // 是图片和选择压缩并且是多张，调用批量压缩
-                    ArrayList<String> medias = new ArrayList<>();
-                    for (LocalMedia media : images) {
-                        medias.add(media.getPath());
-                    }
-                    startCrop(medias);
-                }
+            if (config.enableCrop &&config.selectionMode == PictureConfig.SINGLE&& eqImg) {
+                originalPath = image.getPath();
+                startCrop(originalPath);
             } else if (config.isCompress && eqImg) {
                 // 图片才压缩，视频不管
                 compressImage(images);
@@ -801,8 +788,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 ImagesObservable.getInstance().saveLocalMedia(previewImages);
                 bundle.putSerializable(PictureConfig.EXTRA_SELECT_LIST, (Serializable) selectedImages);
                 bundle.putInt(PictureConfig.EXTRA_POSITION, position);
-                startActivity(PicturePreviewActivity.class, bundle,
-                        config.selectionMode == PictureConfig.SINGLE ? UCrop.REQUEST_CROP : UCropMulti.REQUEST_MULTI_CROP);
+                startActivity(PicturePreviewActivity.class, bundle, UCrop.REQUEST_CROP);
                 overridePendingTransition(R.anim.a5, 0);
                 break;
             case PictureConfig.TYPE_VIDEO:
@@ -915,20 +901,6 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                         medias.add(media);
                         handlerResult(medias);
                     }
-                    break;
-                case UCropMulti.REQUEST_MULTI_CROP:
-                    List<CutInfo> mCuts = UCropMulti.getOutput(data);
-                    for (CutInfo c : mCuts) {
-                        media = new LocalMedia();
-                        imageType = PictureMimeType.createImageType(c.getPath());
-                        media.setCut(true);
-                        media.setPath(c.getPath());
-                        media.setCutPath(c.getCutPath());
-                        media.setPictureType(imageType);
-                        media.setMimeType(config.mimeType);
-                        medias.add(media);
-                    }
-                    handlerResult(medias);
                     break;
                 case PictureConfig.REQUEST_CAMERA:
                     if (config.mimeType == PictureMimeType.ofAudio()) {
